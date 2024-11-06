@@ -4,16 +4,12 @@ __author__ = "730648923"
 secret_word: str = ""
 
 
-def input_guess(correct_length: int):
-    while True:
-        guess = input(f"Enter a guess with {correct_length} characters: ")
-        if len(guess) == correct_length:
-            return guess
-        else:
-            print(
-                f"Your guess must be exactly {correct_length} characters long. Try again: ",
-                guess,
-            )
+def input_guess(secret_word_length: int) -> str:
+    """Takes the user input secret word"""
+    word: str = input(f"Enter a {secret_word_length} character word: ")
+    while len(word) != secret_word_length:
+        word = input(f"That wasn't {secret_word_length} chars! Try again:")
+    return word
 
 
 def contains_char(user_word: str, one_char: str) -> bool:
@@ -49,23 +45,17 @@ def emojified(user_guess: str, secret_word: str) -> str:
 
 def main(secret: str) -> None:
     """The entrypoint of the program and main game loop."""
-    secret = secret
-    len_secret: int = len(secret)
-    num_turns: int = 1
-    win: bool = False
-    guess: str = ""
-    while num_turns <= len_secret and win == False:
-        print("=== Turn", num_turns, "/", len_secret, " ===")
-        guess = emojified(input_guess(len(secret)), secret)
-        print(guess)
-        num_turns += 1
-    if guess == secret:
-        win == True
-        print("You won in ", num_turns, "/", len_secret)
-        return win
-    if guess != secret and num_turns > len_secret:
-        print("X/", len_secret, " - Sorry, try again tomorrow!")
+    turn: int = 1
+    while turn <= 6:
+        print(f"===Turn {turn}/6===")
+        word_guess: str = input_guess(len(secret))
+        print(emojified(word_guess, secret))
+        if word_guess == secret:
+            print(f"You won in {turn}/6 turns!")
+            return None
+        turn += 1
+    print("X/6 - Sorry, try again tomorrow!")
 
 
 if __name__ == "__main__":
-    main(secret="codes")
+    main("codes")
